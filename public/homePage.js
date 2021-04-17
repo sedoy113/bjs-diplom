@@ -8,6 +8,7 @@ logoutButton.action = function () {
 			location.reload();
 		} else {
 			console.error(response.data);
+			ProfileWidget.showProfile(response.data);
 		}
 	}
 	);
@@ -34,7 +35,7 @@ const getRatesBoard = function () {
 
 getRatesBoard();
 
-setInterval(() => getRatesBoard(), 60000);
+setInterval(getRatesBoard, 60000);
 
 const moneyManager = new MoneyManager();
 
@@ -42,9 +43,9 @@ moneyManager.addMoneyCallback = function (data) {
 	ApiConnector.addMoney(data, response => {
 		if (response.success) {
 			ProfileWidget.showProfile(response.data);
-			moneyManager.setMessage(false, 'Баланс успешно пополнен');
+			moneyManager.setMessage(response.success, 'Баланс успешно пополнен');
 		} else {
-			moneyManager.setMessage(true, 'При пополнении баланса возникла ошибка');
+			moneyManager.setMessage(response.success, 'При пополнении баланса возникла ошибка');
 		}
 	}
 	);
@@ -54,9 +55,9 @@ moneyManager.conversionMoneyCallback = function (data) {
 	ApiConnector.convertMoney(data, response => {
 		if (response.success) {
 			ProfileWidget.showProfile(response.data);
-			moneyManager.setMessage(false, 'Конвертация валюты прошла успешно');
+			moneyManager.setMessage(response.success, 'Конвертация валюты прошла успешно');
 		} else {
-			moneyManager.setMessage(true, 'При конвертации валюты возникла ошибка');
+			moneyManager.setMessage(response.success, 'При конвертации валюты возникла ошибка');
 		}
 	}
 	);
@@ -67,9 +68,9 @@ moneyManager.sendMoneyCallback = function (data) {
 		console.log(response);
 		if (response.success) {
 			ProfileWidget.showProfile(response.data);
-			moneyManager.setMessage(false, 'Перевод прошел успешно');
+			moneyManager.setMessage(response.success, 'Перевод прошел успешно');
 		} else {
-			moneyManager.setMessage(true, 'При переводе возникла ошибка');
+			moneyManager.setMessage(response.success, 'При переводе возникла ошибка');
 		}
 	}
 	);
@@ -94,9 +95,9 @@ favoritesWidget.addUserCallback = function (data) {
 	ApiConnector.addUserToFavorites(data, response => {
 		if (response.success) {
 			getFavoritesList();
-			moneyManager.setMessage(false, 'Пользователь добавлен в Избранное');
+			favoritesWidget.setMessage(response.success, 'Пользователь добавлен в Избранное');
 		} else {
-			moneyManager.setMessage(true, 'При добавлении пользователя в Избранное возникла ошибка');
+			favoritesWidget.setMessage(response.success, 'При добавлении пользователя в Избранное возникла ошибка');
 		}
 	}
 	);
@@ -106,9 +107,9 @@ favoritesWidget.removeUserCallback = function (data) {
 	ApiConnector.removeUserFromFavorites(data, response => {
 		if (response.success) {
 			getFavoritesList();
-			moneyManager.setMessage(false, 'Пользователь удален из Избранного');
+			favoritesWidget.setMessage(response.success, 'Пользователь удален из Избранного');
 		} else {
-			moneyManager.setMessage(true, 'При удалении пользователя из Избранного возникла ошибка');
+			favoritesWidget.setMessage(response.success, 'При удалении пользователя из Избранного возникла ошибка');
 		}
 	}
 	);
